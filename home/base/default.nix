@@ -4,6 +4,7 @@
     ../options.nix
     ./git.nix
     ./packages.nix
+    ./pass.nix
     ./secrets.nix
     ./shell.nix
     ./theme.nix

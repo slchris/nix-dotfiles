@@ -30,7 +30,6 @@ in
         inetutils # telnet
         nmap
         ntfy-sh
-        pass
         rclone
         restic
         smartmontools

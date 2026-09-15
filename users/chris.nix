@@ -7,6 +7,16 @@
     publicKeys = [ ../keys/chris.asc ];
   };
 
+  # 密码库在 GitHub 私有仓库（经 gh 的 token 克隆）与 homelab 的 Gitea 各有一份。
+  dotfiles.pass = {
+    enable = true;
+    cloneFrom = "github";
+    remotes = {
+      github = "https://github.com/slchris/pass.git";
+      origin = "https://git.infra.plz.ac/slchris/.password-store.git";
+    };
+  };
+
   dotfiles.secrets = {
     githubUser = "slchris";
     sshConfig = true;
