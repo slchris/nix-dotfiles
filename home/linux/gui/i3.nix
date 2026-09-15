@@ -40,12 +40,12 @@ in
       };
 
       window = {
-        border = 2;
+        border = 2 * cfg.scale;
         titlebar = false;
         hideEdgeBorders = "none";
       };
       floating = {
-        border = 2;
+        border = 2 * cfg.scale;
         titlebar = false;
         criteria = [
           { class = "Pavucontrol"; }
@@ -58,8 +58,8 @@ in
         ];
       };
       gaps = {
-        inner = 8;
-        outer = 4;
+        inner = 8 * cfg.scale;
+        outer = 4 * cfg.scale;
       };
       focus.followMouse = false;
 
@@ -102,9 +102,15 @@ in
           "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5%";
         "XF86AudioMute" =
           "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle";
+        "XF86AudioMicMute" =
+          "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle";
         "XF86AudioPlay" = "exec --no-startup-id ${pkgs.playerctl}/bin/playerctl play-pause";
         "XF86AudioNext" = "exec --no-startup-id ${pkgs.playerctl}/bin/playerctl next";
         "XF86AudioPrev" = "exec --no-startup-id ${pkgs.playerctl}/bin/playerctl previous";
+      }
+      // lib.optionalAttrs (cfg.backlight != null) {
+        "XF86MonBrightnessUp" = "exec --no-startup-id ${pkgs.brightnessctl}/bin/brightnessctl --device=${cfg.backlight} set 5%+";
+        "XF86MonBrightnessDown" = "exec --no-startup-id ${pkgs.brightnessctl}/bin/brightnessctl --device=${cfg.backlight} set 5%-";
       };
     };
   };

@@ -8,6 +8,7 @@ let
   cfg = config.dotfiles.desktop;
   c = import ./palette.nix;
   size = toString cfg.fontSize;
+  px = n: n * cfg.scale;
 in
 {
   services.polybar = {
@@ -21,16 +22,17 @@ in
     settings = {
       "bar/main" = {
         width = "100%";
-        height = 32;
-        radius = 10;
+        height = px 32;
+        radius = px 10;
+        inherit (cfg) dpi;
         # 悬浮样式：四周留出与 i3 间距一致的透明边框，由 picom 合成透明。
-        border-top-size = 6;
-        border-left-size = 12;
-        border-right-size = 12;
+        border-top-size = px 6;
+        border-left-size = px 12;
+        border-right-size = px 12;
         border-color = "#00000000";
         background = c.base;
         foreground = c.text;
-        line-size = 3;
+        line-size = px 3;
         padding-left = 1;
         padding-right = 2;
         module-margin = 1;
@@ -47,7 +49,9 @@ in
             "memory"
             "pulseaudio"
           ]
+          ++ lib.optional (cfg.backlight != null) "backlight"
           ++ lib.optional (cfg.networkInterface != null) "network"
+          ++ lib.optional (cfg.battery != null) "battery"
           ++ [
             "date"
             "tray"
@@ -128,6 +132,43 @@ in
         label-connected-foreground = c.teal;
         label-disconnected = "󰈂 Offline";
         label-disconnected-foreground = c.red;
+      };
+
+      "module/backlight" = lib.mkIf (cfg.backlight != null) {
+        type = "internal/backlight";
+        card = cfg.backlight;
+        enable-scroll = true;
+        format = "<ramp> <label>";
+        ramp-0 = "󰃞";
+        ramp-1 = "󰃟";
+        ramp-2 = "󰃠";
+        ramp-foreground = c.yellow;
+        label = "%percentage%%";
+      };
+
+      "module/battery" = lib.mkIf (cfg.battery != null) {
+        type = "internal/battery";
+        battery = cfg.battery;
+        adapter = "AC";
+        full-at = 99;
+        low-at = 15;
+        poll-interval = 5;
+        format-charging = "<label-charging>";
+        label-charging = "󰂄 %percentage%%";
+        label-charging-foreground = c.green;
+        format-discharging = "<ramp-capacity> <label-discharging>";
+        label-discharging = "%percentage%%";
+        ramp-capacity-0 = "󰁺";
+        ramp-capacity-0-foreground = c.red;
+        ramp-capacity-1 = "󰁼";
+        ramp-capacity-1-foreground = c.peach;
+        ramp-capacity-2 = "󰁾";
+        ramp-capacity-3 = "󰂀";
+        ramp-capacity-4 = "󰁹";
+        ramp-capacity-foreground = c.green;
+        format-full = "<label-full>";
+        label-full = "󰁹 %percentage%%";
+        label-full-foreground = c.green;
       };
 
       "module/date" = {

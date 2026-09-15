@@ -1,4 +1,14 @@
+{ config, ... }:
+let
+  inherit (config.dotfiles.desktop) scale;
+in
 {
+  # picom 包自带 XDG 自启动项，会在 systemd 服务之外再启动一份并报错退出，这里隐藏它。
+  xdg.configFile."autostart/picom.desktop".text = ''
+    [Desktop Entry]
+    Hidden=true
+  '';
+
   # 窗口圆角、阴影与淡入淡出。
   services.picom = {
     enable = true;
@@ -17,15 +27,15 @@
       "_GTK_FRAME_EXTENTS@"
     ];
     settings = {
-      corner-radius = 10;
+      corner-radius = 10 * scale;
       rounded-corners-exclude = [
         "class_g = 'flameshot'"
         "window_type = 'dock'"
         "window_type = 'desktop'"
       ];
-      shadow-radius = 18;
-      shadow-offset-x = -14;
-      shadow-offset-y = -14;
+      shadow-radius = 18 * scale;
+      shadow-offset-x = -14 * scale;
+      shadow-offset-y = -14 * scale;
       blur-method = "dual_kawase";
       blur-strength = 4;
       blur-background-exclude = [

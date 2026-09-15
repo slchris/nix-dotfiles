@@ -1,5 +1,6 @@
 { config, pkgs, ... }:
 let
+  inherit (config.dotfiles.desktop) scale;
   c = import ./palette.nix;
   hex = color: builtins.substring 1 6 color;
   dunstctl = "${config.services.dunst.package}/bin/dunstctl";
@@ -17,7 +18,7 @@ let
 
     ${pkgs.i3lock-color}/bin/i3lock-color \
       --nofork --ignore-empty-password --show-failed-attempts \
-      --blur 8 --clock --indicator --radius 120 --ring-width 8 \
+      --blur 8 --clock --indicator --radius ${toString (120 * scale)} --ring-width ${toString (8 * scale)} \
       --inside-color=${hex c.base}cc --ring-color=${hex c.lavender}ff \
       --insidever-color=${hex c.base}cc --ringver-color=${hex c.blue}ff \
       --insidewrong-color=${hex c.base}cc --ringwrong-color=${hex c.red}ff \
@@ -26,7 +27,8 @@ let
       --time-color=${hex c.text}ff --date-color=${hex c.subtext0}ff \
       --verif-color=${hex c.text}ff --wrong-color=${hex c.red}ff --layout-color=${hex c.subtext0}ff \
       --time-font="Inter" --date-font="Inter" --verif-font="Inter" --wrong-font="Inter" \
-      --time-size=56 --date-size=18 --verif-size=18 --wrong-size=18 \
+      --time-size=${toString (56 * scale)} --date-size=${toString (18 * scale)} \
+      --verif-size=${toString (18 * scale)} --wrong-size=${toString (18 * scale)} \
       --time-str="%H:%M" --date-str="%A, %B %d" \
       --verif-text="Verifying" --wrong-text="Wrong password" --noinput-text="No input" --lock-text="Locking"
 

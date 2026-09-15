@@ -42,7 +42,7 @@ in
     };
     antialiasing = true;
     inherit (cfg) hinting;
-    subpixelRendering = "rgb";
+    subpixelRendering = cfg.subpixel;
   };
 
   xresources.properties = {
@@ -50,7 +50,7 @@ in
     "Xft.antialias" = 1;
     "Xft.hinting" = if cfg.hinting == "none" then 0 else 1;
     "Xft.hintstyle" = "hint${cfg.hinting}";
-    "Xft.rgba" = "rgb";
+    "Xft.rgba" = cfg.subpixel;
     "Xft.lcdfilter" = "lcddefault";
   };
 

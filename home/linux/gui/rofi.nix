@@ -10,6 +10,7 @@ in
     plugins = [ pkgs.rofi-calc ];
     extraConfig = {
       modi = "drun,run,window,calc";
+      dpi = cfg.dpi;
       show-icons = true;
       icon-theme = "Papirus-Dark";
       drun-display-format = "{name}";
