@@ -7,9 +7,11 @@
     vSync = false;
     fade = true;
     fadeDelta = 4;
+    fadeExclude = [ "class_g = 'flameshot'" ];
     shadow = true;
     shadowOpacity = 0.35;
     shadowExclude = [
+      "class_g = 'flameshot'"
       "window_type = 'dock'"
       "window_type = 'desktop'"
       "_GTK_FRAME_EXTENTS@"
@@ -17,6 +19,7 @@
     settings = {
       corner-radius = 10;
       rounded-corners-exclude = [
+        "class_g = 'flameshot'"
         "window_type = 'dock'"
         "window_type = 'desktop'"
       ];
@@ -26,6 +29,7 @@
       blur-method = "dual_kawase";
       blur-strength = 4;
       blur-background-exclude = [
+        "class_g = 'flameshot'"
         "window_type = 'dock'"
         "window_type = 'desktop'"
         "_GTK_FRAME_EXTENTS@"

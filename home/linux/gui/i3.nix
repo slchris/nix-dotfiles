@@ -9,16 +9,6 @@ let
   c = import ./palette.nix;
   mod = "Mod4";
 
-  screenshot = pkgs.writeShellScript "screenshot" ''
-    # 框选区域截图：复制到剪贴板，同时保存到 ~/Pictures/Screenshots。
-    dir="$HOME/Pictures/Screenshots"
-    mkdir -p "$dir"
-    file="$dir/$(date +%Y%m%d-%H%M%S).png"
-    ${pkgs.maim}/bin/maim --select --hidecursor "$file" || exit 0
-    ${pkgs.xclip}/bin/xclip -selection clipboard -t image/png < "$file"
-    ${pkgs.libnotify}/bin/notify-send -i "$file" "截图已复制" "$file"
-  '';
-
   # 窗口配色取自 Catppuccin 官方的 i3 配色方案。
   colorSet = border: text: {
     inherit border text;
@@ -92,11 +82,6 @@ in
           always = true;
           notification = false;
         }
-        # 10 分钟无操作关闭显示器（锁屏见 lock.nix）。
-        {
-          command = "${pkgs.xset}/bin/xset dpms 600 600 600";
-          notification = false;
-        }
       ]
       ++ lib.optional (cfg.wallpaper != null) {
         command = "${pkgs.feh}/bin/feh --no-fehbg --bg-fill ${cfg.wallpaper}";
@@ -111,8 +96,6 @@ in
         "${mod}+b" = "exec google-chrome-stable";
         "${mod}+e" = "exec thunar";
         "${mod}+Shift+x" = "exec --no-startup-id loginctl lock-session";
-        "${mod}+Shift+s" = "exec --no-startup-id ${screenshot}";
-        "Print" = "exec --no-startup-id ${screenshot}";
         "XF86AudioRaiseVolume" =
           "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5%";
         "XF86AudioLowerVolume" =

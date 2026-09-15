@@ -11,7 +11,9 @@
     ./lock.nix
     ./picom.nix
     ./polybar.nix
+    ./power.nix
     ./rofi.nix
+    ./screenshot.nix
     ./terminal.nix
   ];
 }

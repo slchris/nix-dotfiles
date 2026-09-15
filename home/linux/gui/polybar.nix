@@ -51,6 +51,7 @@ in
           ++ [
             "date"
             "tray"
+            "power"
           ]
         );
         cursor-click = "pointer";
@@ -114,7 +115,7 @@ in
         ramp-volume-1 = "󰖀";
         ramp-volume-2 = "󰕾";
         ramp-volume-foreground = c.peach;
-        label-muted = "󰝟 静音";
+        label-muted = "󰝟 Muted";
         label-muted-foreground = c.overlay0;
         click-right = "pavucontrol";
       };
@@ -125,14 +126,14 @@ in
         interval = 3;
         label-connected = "󰈀 %downspeed:8%";
         label-connected-foreground = c.teal;
-        label-disconnected = "󰈂 断开";
+        label-disconnected = "󰈂 Offline";
         label-disconnected-foreground = c.red;
       };
 
       "module/date" = {
         type = "internal/date";
         interval = 1;
-        date = "%m月%d日 %a";
+        date = "%a %b %-d";
         time = "%H:%M";
         format-prefix = "󰃭 ";
         format-prefix-foreground = c.lavender;
