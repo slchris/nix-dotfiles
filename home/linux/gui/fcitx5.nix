@@ -25,9 +25,23 @@ in
     '';
   };
 
-  # 雾凇拼音：候选词每页 7 个。
+  # 所有窗口共用中英文状态，切换窗口后不用重新切换。fcitx5 退出时会重写这个文件，每次部署都覆盖回来。
+  xdg.configFile."fcitx5/config" = {
+    force = true;
+    text = ''
+      [Behavior]
+      ShareInputState=All
+    '';
+  };
+
+  # nixpkgs 的 rime-ice 把上游的 default.yaml 改名为 rime_ice_suggestion.yaml，原位置只留一个空文件，
+  # 不引入它就没有任何输入方案。方案只保留雾凇拼音全拼，左 Shift 切换中英文，候选词每页 7 个。
+  # 词库用 rime-ice 自带的字表、基础、扩展与腾讯词库。修改后重启 fcitx5 才会重新部署。
   xdg.dataFile."fcitx5/rime/default.custom.yaml".text = ''
     patch:
+      __include: rime_ice_suggestion:/
+      schema_list:
+        - schema: rime_ice
       "menu/page_size": 7
   '';
 }
