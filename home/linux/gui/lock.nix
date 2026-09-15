@@ -1,0 +1,36 @@
+{ pkgs, ... }:
+let
+  c = import ./palette.nix;
+  hex = color: builtins.substring 1 6 color;
+
+  # i3lock-color：截取当前屏幕模糊后作为背景，中间显示时钟与输入状态环。
+  # 可执行文件名是 i3lock，沿用系统上 programs.i3lock 提供的 PAM 配置。
+  lock = pkgs.writeShellScript "lock" ''
+    exec ${pkgs.i3lock-color}/bin/i3lock-color \
+      --nofork --ignore-empty-password --show-failed-attempts \
+      --blur 8 --clock --indicator --radius 120 --ring-width 8 \
+      --inside-color=${hex c.base}cc --ring-color=${hex c.lavender}ff \
+      --insidever-color=${hex c.base}cc --ringver-color=${hex c.blue}ff \
+      --insidewrong-color=${hex c.base}cc --ringwrong-color=${hex c.red}ff \
+      --keyhl-color=${hex c.green}ff --bshl-color=${hex c.peach}ff \
+      --line-color=00000000 --separator-color=00000000 \
+      --time-color=${hex c.text}ff --date-color=${hex c.subtext0}ff \
+      --verif-color=${hex c.text}ff --wrong-color=${hex c.red}ff --layout-color=${hex c.subtext0}ff \
+      --time-font="Inter" --date-font="Source Han Sans SC" \
+      --verif-font="Source Han Sans SC" --wrong-font="Source Han Sans SC" \
+      --time-size=56 --date-size=18 --verif-size=18 --wrong-size=18 \
+      --time-str="%H:%M" --date-str="%m月%d日 %A" \
+      --verif-text="验证中" --wrong-text="口令错误" --noinput-text="未输入" --lock-text="正在锁定"
+  '';
+in
+{
+  # xss-lock 在两种情况下锁屏：无操作超时，以及 systemd 准备休眠或执行 loginctl lock-session 时。
+  # --transfer-sleep-lock 让休眠等到锁屏画面出现后再进行，唤醒时不会闪现桌面内容。
+  services.screen-locker = {
+    enable = true;
+    lockCmd = "${lock}";
+    inactiveInterval = 10;
+    xss-lock.extraOptions = [ "--transfer-sleep-lock" ];
+    xautolock.enable = false;
+  };
+}
