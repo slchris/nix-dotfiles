@@ -40,6 +40,13 @@ nixpkgs.config.allowUnfreePredicate =
 
 复制 `hosts/taiki.nix` 并修改，再把主机名加进 `flake.nix` 的 `hosts`。
 
+atuin 要在新机器上登录一次。先在已有机器上执行 `atuin key` 得到助记词，再在新机器上执行下面的命令，按提示输入口令和助记词：
+
+```sh
+atuin login -u chris
+atuin sync
+```
+
 ## 备注
 
 - catppuccin/nix 的 polybar、starship、fzf 模块在求值时要读取主题文件（IFD），没有 Linux 构建机的 Mac 上会求值失败。这三个模块已关闭，颜色按 `home/linux/gui/palette.nix` 手写。

@@ -41,7 +41,17 @@ in
         yubikey-manager
         yubikey-personalization
       ];
-      programs.atuin.enable = true;
+      # 同步到 homelab 的 atuin 服务端，与 Mac 上的设置一致。新机器要登录一次，见 README。
+      programs.atuin = {
+        enable = true;
+        settings = {
+          sync_address = "https://atuin.infra.plz.ac";
+          auto_sync = true;
+          sync_frequency = "5m";
+          enter_accept = true;
+          sync.records = true;
+        };
+      };
     })
 
     (lib.mkIf cfg.dev.enable {
