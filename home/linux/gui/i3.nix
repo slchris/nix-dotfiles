@@ -28,10 +28,11 @@ let
   };
 in
 {
-  # 由 home-manager 生成 ~/.xsession 启动 i3，LightDM 选 i3 会话时会执行它。
-  # NixOS 自带的会话脚本只启动 graphical-session.target，退出 i3 后不会停止；只要 systemd 用户实例还在（例如开着 SSH），
-  # xss-lock、polybar 等服务就一直绑定已失效的 DISPLAY，下次登录也不会重新启动。这个脚本在 i3 退出后停止这些服务。
+  # 由 home-manager 生成 ~/.xsession 启动 i3。部署时重启 display-manager 会直接杀掉会话，
+  # graphical-session.target 与旧的 DISPLAY 留在 systemd 用户实例里；~/.xprofile 在下次登录时先清理它们。
   xsession.enable = true;
+  # ~/.xsession 取代了 NixOS 的会话脚本，fcitx5、nm-applet 这些 XDG 自启动项要由它拉起。
+  xdg.autostart.enable = true;
 
   xsession.windowManager.i3 = {
     enable = true;
