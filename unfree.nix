@@ -4,8 +4,6 @@
   "claude-desktop"
   "codeql"
   "consul"
-  "crush"
-  "github-copilot-cli"
   "google-chrome"
   "lmstudio"
   "obsidian"

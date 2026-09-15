@@ -15,7 +15,7 @@ in
     dev.enable = lib.mkEnableOption "开发工具";
     cloud.enable = lib.mkEnableOption "云平台与基础设施工具";
     kubernetes.enable = lib.mkEnableOption "Kubernetes 与容器工具";
-    ai.enable = lib.mkEnableOption "AI 编程工具（命令行智能体）";
+    ai.enable = lib.mkEnableOption "AI 编程工具（Claude Code、Codex、opencode）";
   };
 
   config = lib.mkMerge [
@@ -138,15 +138,9 @@ in
     # 这些工具几乎每周发版，稳定版 nixpkgs 落后太多，从 unstable 取。
     (lib.mkIf cfg.ai.enable {
       home.packages = with unstablePkgs; [
-        aider-chat
         claude-code
         codex
-        crush
-        gemini-cli
-        github-copilot-cli
-        goose-cli
         opencode
-        qwen-code
       ];
     })
   ];
