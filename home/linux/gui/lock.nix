@@ -6,7 +6,8 @@ let
   dunstctl = "${config.services.dunst.package}/bin/dunstctl";
 
   # 显示器在无操作 10 分钟后关闭，锁屏期间缩短为 1 分钟。
-  dpms = seconds: "${pkgs.xset}/bin/xset dpms ${toString seconds} ${toString seconds} ${toString seconds}";
+  dpms =
+    seconds: "${pkgs.xset}/bin/xset dpms ${toString seconds} ${toString seconds} ${toString seconds}";
 
   # i3lock-color：截取当前屏幕模糊后作为背景，中间显示时钟与输入状态环。
   # 锁屏期间暂停通知弹窗和正在播放的媒体，解锁后恢复通知。
