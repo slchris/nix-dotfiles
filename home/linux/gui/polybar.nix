@@ -133,7 +133,7 @@ in
       "module/date" = {
         type = "internal/date";
         interval = 1;
-        date = "%a %b %-d";
+        date = "%a %b %d";
         time = "%H:%M";
         format-prefix = "󰃭 ";
         format-prefix-foreground = c.lavender;

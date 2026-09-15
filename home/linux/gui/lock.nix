@@ -27,7 +27,7 @@ let
       --verif-color=${hex c.text}ff --wrong-color=${hex c.red}ff --layout-color=${hex c.subtext0}ff \
       --time-font="Inter" --date-font="Inter" --verif-font="Inter" --wrong-font="Inter" \
       --time-size=56 --date-size=18 --verif-size=18 --wrong-size=18 \
-      --time-str="%H:%M" --date-str="%A, %B %-d" \
+      --time-str="%H:%M" --date-str="%A, %B %d" \
       --verif-text="Verifying" --wrong-text="Wrong password" --noinput-text="No input" --lock-text="Locking"
 
     ${dpms 600}
