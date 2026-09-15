@@ -86,7 +86,11 @@ in
     # 登录时执行一次；插卡时由系统层的 udev 规则再次触发。已经记下所有签名密钥时不碰卡，
     # 记录完成后结束本用户的 scdaemon 释放读卡器，避免多个用户同时登录时抢占别人的卡。
     systemd.user.services.gpg-card-learn = lib.mkIf (pkgs.stdenv.isLinux && signingKeys != [ ]) {
-      Unit.Description = "Record private keys stored on OpenPGP cards";
+      # 目标会等它想要的 oneshot 服务结束才算到达；排在桌面会话之后，避免没插卡时等满 10 秒才启动输入法等自启动项。
+      Unit = {
+        Description = "Record private keys stored on OpenPGP cards";
+        After = [ "graphical-session.target" ];
+      };
       Service = {
         Type = "oneshot";
         ExecStart = toString (
