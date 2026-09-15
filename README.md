@@ -77,6 +77,10 @@ atuin login -u chris
 atuin sync
 ```
 
+## CI
+
+每次推送执行 `.github/workflows/check.yml`：用 gitleaks 扫描全部提交、`nix fmt -- --ci` 检查格式、求值所有 homeConfigurations。提交前在本机执行 `nix fmt`。
+
 ## 备注
 
 - catppuccin/nix 的 polybar、starship、fzf 模块在求值时要读取主题文件（IFD），没有 Linux 构建机的 Mac 上会求值失败。这三个模块已关闭，颜色按 `home/linux/gui/palette.nix` 手写。

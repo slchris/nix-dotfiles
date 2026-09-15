@@ -1,0 +1,7 @@
+# gitleaks 默认规则加上本仓库的误报例外。
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "README 里示例用的 OpenPGP 密钥 ID"
+regexes = ['''^0x0123456789ABCDEF$''']

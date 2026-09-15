@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # 扫描全部提交，公开仓库里历史上出现过的密钥同样算泄露
+          fetch-depth: 0
+
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Secret scan
+        run: nix run --inputs-from . nixpkgs#gitleaks -- git --redact --no-banner .
+
+      - name: Format
+        run: nix fmt -- --ci
+
+      # 与 Mac 上一样只求值不构建，并禁止 import from derivation。
+      - name: Evaluate home configurations
+        run: |
+          for name in $(nix eval --json .#homeConfigurations --apply builtins.attrNames | jq -r '.[]'); do
+            echo "== $name"
+            nix eval --option allow-import-from-derivation false --raw ".#homeConfigurations.\"$name\".activationPackage.drvPath"
+            echo
+          done

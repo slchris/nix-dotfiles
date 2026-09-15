@@ -49,6 +49,12 @@
     {
       lib.unfreePackages = unfreePackages;
 
+      # nix fmt 用 nixfmt 格式化全部 .nix 文件，CI 里用 nix fmt -- --ci 检查。
+      formatter = lib.genAttrs [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ] (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
+
       # 给 NixOS 或 nix-darwin 里的 home-manager 使用，引用一台主机和一个用户：
       #   home-manager.users.chris.imports = [ nix-dotfiles.homeModules.taiki nix-dotfiles.homeModules.chris ];
       homeModules =
