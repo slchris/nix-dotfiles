@@ -14,6 +14,7 @@
         android-tools
         calibre
         nurPkgs.claude-desktop
+        nurPkgs.zcode
         dbeaver-bin
         freerdp
         lmstudio

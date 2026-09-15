@@ -3,9 +3,11 @@
   "claude-code"
   "claude-desktop"
   "codeql"
+  "github-copilot-cli"
   "consul"
   "google-chrome"
   "lmstudio"
   "obsidian"
   "postman"
+  "zcode"
 ]

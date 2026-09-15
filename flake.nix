@@ -3,6 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    # 更新很快的 AI 编程工具从 unstable 取。
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -25,6 +27,7 @@
     {
       self,
       nixpkgs,
+      nixpkgs-unstable,
       home-manager,
       catppuccin,
       sops-nix,
@@ -56,6 +59,10 @@
             {
               sops.package = sops-nix.packages.${hosts.${name}}.sops-install-secrets;
               _module.args.nurPkgs = nur-slchris.legacyPackages.${hosts.${name}};
+              _module.args.unstablePkgs = import nixpkgs-unstable {
+                system = hosts.${name};
+                config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) unfreePackages;
+              };
             }
             ./hosts/${name}.nix
           ];

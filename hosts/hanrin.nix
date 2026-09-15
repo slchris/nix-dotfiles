@@ -22,6 +22,7 @@
     dev.enable = true;
     cloud.enable = true;
     kubernetes.enable = true;
+    ai.enable = true;
     gui.enable = true;
   };
 }

@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  unstablePkgs,
   ...
 }:
 let
@@ -14,6 +15,7 @@ in
     dev.enable = lib.mkEnableOption "开发工具";
     cloud.enable = lib.mkEnableOption "云平台与基础设施工具";
     kubernetes.enable = lib.mkEnableOption "Kubernetes 与容器工具";
+    ai.enable = lib.mkEnableOption "AI 编程工具（命令行智能体）";
   };
 
   config = lib.mkMerge [
@@ -57,12 +59,9 @@ in
     (lib.mkIf cfg.dev.enable {
       home.packages = with pkgs; [
         act
-        claude-code
-        codex
         cmake
         codeql
         dnsperf
-        gemini-cli
         git-filter-repo
         git-lfs
         gitleaks
@@ -74,7 +73,6 @@ in
         mise
         nasm
         ninja
-        opencode
         osv-scanner
         pkgconf
         postgresql_14
@@ -135,6 +133,21 @@ in
         velero
       ];
       programs.k9s.enable = true;
+    })
+
+    # 这些工具几乎每周发版，稳定版 nixpkgs 落后太多，从 unstable 取。
+    (lib.mkIf cfg.ai.enable {
+      home.packages = with unstablePkgs; [
+        aider-chat
+        claude-code
+        codex
+        crush
+        gemini-cli
+        github-copilot-cli
+        goose-cli
+        opencode
+        qwen-code
+      ];
     })
   ];
 }
