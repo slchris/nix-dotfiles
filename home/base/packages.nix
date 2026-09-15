@@ -57,6 +57,8 @@ in
     (lib.mkIf cfg.dev.enable {
       home.packages = with pkgs; [
         act
+        claude-code
+        codex
         cmake
         codeql
         dnsperf

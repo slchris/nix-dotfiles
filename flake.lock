@@ -74,11 +74,32 @@
         "type": "github"
       }
     },
+    "nur-slchris": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789441558,
+        "narHash": "sha256-93oOXkSLq8+i8NF3SShZPa14ypCqeYve/7s6RNaEoxA=",
+        "owner": "slchris",
+        "repo": "nur",
+        "rev": "feec7c2bf0ccf0be6b42eaf231652332ba46113e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "slchris",
+        "repo": "nur",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "catppuccin": "catppuccin",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
+        "nur-slchris": "nur-slchris",
         "sops-nix": "sops-nix"
       }
     },

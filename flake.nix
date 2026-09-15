@@ -14,6 +14,11 @@
     };
     # 解密私有仓库 nix-secrets 里的配置。不跟随 nixpkgs，sops-install-secrets 才能从 cache.thalheim.io 下载。
     sops-nix.url = "github:Mic92/sops-nix";
+    # nixpkgs 里没有的软件，例如 Claude Desktop。
+    nur-slchris = {
+      url = "github:slchris/nur";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -23,6 +28,7 @@
       home-manager,
       catppuccin,
       sops-nix,
+      nur-slchris,
       ...
     }:
     let
@@ -47,7 +53,10 @@
           imports = [
             catppuccin.homeModules.catppuccin
             sops-nix.homeManagerModules.sops
-            { sops.package = sops-nix.packages.${hosts.${name}}.sops-install-secrets; }
+            {
+              sops.package = sops-nix.packages.${hosts.${name}}.sops-install-secrets;
+              _module.args.nurPkgs = nur-slchris.legacyPackages.${hosts.${name}};
+            }
             ./hosts/${name}.nix
           ];
         })

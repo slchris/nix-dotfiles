@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  nurPkgs,
   ...
 }:
 {
@@ -12,6 +13,7 @@
       home.packages = with pkgs; [
         android-tools
         calibre
+        nurPkgs.claude-desktop
         dbeaver-bin
         freerdp
         lmstudio
