@@ -31,22 +31,26 @@
       hosts = {
         taiki = "x86_64-linux";
       };
+      # 个人身份（git、签名密钥、私密配置），与主机配置分开，同一台机器的多个用户各引用自己的一份。
+      users = [ "chris" ];
       # 用到的非自由软件。在 NixOS 里使用时，需要在系统的 nixpkgs.config.allowUnfreePredicate 里放行同样的名单。
       unfreePackages = import ./unfree.nix;
     in
     {
       lib.unfreePackages = unfreePackages;
 
-      # 给 NixOS 或 nix-darwin 里的 home-manager 使用，每台机器只引用自己那一个：
-      #   home-manager.users.chris.imports = [ nix-dotfiles.homeModules.taiki ];
-      homeModules = lib.genAttrs (lib.attrNames hosts) (name: {
-        imports = [
-          catppuccin.homeModules.catppuccin
-          sops-nix.homeManagerModules.sops
-          { sops.package = sops-nix.packages.${hosts.${name}}.sops-install-secrets; }
-          ./hosts/${name}.nix
-        ];
-      });
+      # 给 NixOS 或 nix-darwin 里的 home-manager 使用，引用一台主机和一个用户：
+      #   home-manager.users.chris.imports = [ nix-dotfiles.homeModules.taiki nix-dotfiles.homeModules.chris ];
+      homeModules =
+        lib.genAttrs (lib.attrNames hosts) (name: {
+          imports = [
+            catppuccin.homeModules.catppuccin
+            sops-nix.homeManagerModules.sops
+            { sops.package = sops-nix.packages.${hosts.${name}}.sops-install-secrets; }
+            ./hosts/${name}.nix
+          ];
+        })
+        // lib.genAttrs users (name: ./users/${name}.nix);
 
       # 不经 NixOS 单独求值，用于检查配置，也可以在非 NixOS 的 Linux 上直接使用。
       homeConfigurations = lib.mapAttrs' (
@@ -59,6 +63,7 @@
             };
             modules = [
               self.homeModules.${name}
+              self.homeModules.chris
               {
                 home = {
                   username = "chris";

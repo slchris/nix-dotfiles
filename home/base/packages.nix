@@ -90,7 +90,8 @@ in
       ];
       programs.gh = {
         enable = true;
-        settings.git_protocol = "ssh";
+        # 与 Mac 一致走 HTTPS，由 gh 的 token 认证，不依赖插卡。
+        settings.git_protocol = "https";
       };
     })
 

@@ -1,6 +1,7 @@
 { pkgs, ... }:
 {
   # 泰麒（taiki）：家里的工作站，24 英寸 1080p 显示器（约 92 DPI），GTX 1080。
+  # 这里只放与机器有关的设置，个人身份在 users/ 下，使用方把两者一起引用。
   imports = [ ../home/linux/gui ];
 
   dotfiles.desktop = {
