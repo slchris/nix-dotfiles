@@ -5,6 +5,8 @@ let
   dir = "${config.home.homeDirectory}/Pictures/Screenshots";
 in
 {
+  # 只写 flameshot 认识的设置：遇到不认识的键（例如 nixpkgs 版本已去掉的 checkForUpdates）会尝试改写只读的配置文件，然后崩溃。
+  # 修改后用 flameshot config --check 检查。
   # flameshot 随桌面启动并常驻，框选后可以标注，按 Ctrl+C 复制、Ctrl+S 保存。
   services.flameshot = {
     enable = true;
@@ -20,7 +22,6 @@ in
       disabledTrayIcon = true;
       showStartupLaunchMessage = false;
       showHelp = false;
-      checkForUpdates = false;
     };
   };
 
