@@ -14,6 +14,9 @@
     networkInterface = "wlp0s20f3";
     battery = "BAT0";
     backlight = "intel_backlight";
+    keyboardBacklight = "tpacpi::kbd_backlight";
+    # 系统层（homelab 的 laptop.nix）启用了 power-profiles-daemon。
+    powerProfiles = true;
     wallpaper = "${pkgs.nixos-artwork.wallpapers.catppuccin-mocha.gnomeFilePath}";
   };
 

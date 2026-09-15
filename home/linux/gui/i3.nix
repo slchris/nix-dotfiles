@@ -89,32 +89,17 @@ in
         notification = false;
       };
 
-      # 在默认快捷键基础上追加或覆盖。
-      keybindings =
-        lib.mkOptionDefault {
-          "${mod}+d" = "exec --no-startup-id rofi -show drun";
-          "${mod}+Tab" = "exec --no-startup-id rofi -show window";
-          "${mod}+b" = "exec google-chrome-stable";
-          "${mod}+e" = "exec thunar";
-          "${mod}+Shift+x" = "exec --no-startup-id loginctl lock-session";
-          "XF86AudioRaiseVolume" =
-            "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5%";
-          "XF86AudioLowerVolume" =
-            "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5%";
-          "XF86AudioMute" =
-            "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle";
-          "XF86AudioMicMute" =
-            "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle";
-          "XF86AudioPlay" = "exec --no-startup-id ${pkgs.playerctl}/bin/playerctl play-pause";
-          "XF86AudioNext" = "exec --no-startup-id ${pkgs.playerctl}/bin/playerctl next";
-          "XF86AudioPrev" = "exec --no-startup-id ${pkgs.playerctl}/bin/playerctl previous";
-        }
-        // lib.optionalAttrs (cfg.backlight != null) {
-          "XF86MonBrightnessUp" =
-            "exec --no-startup-id ${pkgs.brightnessctl}/bin/brightnessctl --device=${cfg.backlight} set 5%+";
-          "XF86MonBrightnessDown" =
-            "exec --no-startup-id ${pkgs.brightnessctl}/bin/brightnessctl --device=${cfg.backlight} set 5%-";
-        };
+      # 在默认快捷键基础上追加或覆盖。音量、亮度、性能模式这些调节后要弹提示的按键在 osd.nix。
+      keybindings = lib.mkOptionDefault {
+        "${mod}+d" = "exec --no-startup-id rofi -show drun";
+        "${mod}+Tab" = "exec --no-startup-id rofi -show window";
+        "${mod}+b" = "exec google-chrome-stable";
+        "${mod}+e" = "exec thunar";
+        "${mod}+Shift+x" = "exec --no-startup-id loginctl lock-session";
+        "XF86AudioPlay" = "exec --no-startup-id ${pkgs.playerctl}/bin/playerctl play-pause";
+        "XF86AudioNext" = "exec --no-startup-id ${pkgs.playerctl}/bin/playerctl next";
+        "XF86AudioPrev" = "exec --no-startup-id ${pkgs.playerctl}/bin/playerctl previous";
+      };
     };
   };
 }

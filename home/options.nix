@@ -66,5 +66,12 @@
       example = "intel_backlight";
       description = "/sys/class/backlight 下的设备名；设置后 polybar 显示亮度，亮度键可用。";
     };
+    keyboardBacklight = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      example = "tpacpi::kbd_backlight";
+      description = "/sys/class/leds 下的键盘背光；设置后用 Fn 键调节键盘背光时弹出提示。";
+    };
+    powerProfiles = lib.mkEnableOption "性能模式的快捷键与切换提示，系统层要启用 power-profiles-daemon";
   };
 }

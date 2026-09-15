@@ -64,7 +64,7 @@ home-manager.users.alice.imports = [
 
 ## OpenPGP 卡
 
-签名密钥在 YubiKey 这类 OpenPGP 卡上时，登录桌面或插卡后会自动执行一次 `gpg --card-status`，记下卡上的私钥，之后 git 提交直接签名。系统层需要启用 pcscd，并允许用户的 systemd 服务访问读卡器，taiki 的做法见 homelab 仓库的 `workstation/apps.nix`。
+签名密钥在 YubiKey 这类 OpenPGP 卡上时，登录桌面或插卡后会自动执行一次 `gpg --card-status`，记下卡上的私钥，之后 git 提交直接签名。系统层需要启用 pcscd，并允许用户的 systemd 服务访问读卡器，taiki 的做法见 homelab 仓库的 `nix/workstations/nixos/apps.nix`。
 
 ## 新增主机
 

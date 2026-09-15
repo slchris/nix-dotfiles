@@ -9,6 +9,7 @@
     ./gtk.nix
     ./i3.nix
     ./lock.nix
+    ./osd.nix
     ./picom.nix
     ./polybar.nix
     ./power.nix
