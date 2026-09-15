@@ -13,6 +13,10 @@
       home.packages = with pkgs; [
         android-tools
         calibre
+        evince
+        keepassxc
+        libreoffice
+        telegram-desktop
         nurPkgs.claude-desktop
         nurPkgs.zcode
         dbeaver-bin
@@ -20,8 +24,13 @@
         lmstudio
         obsidian
         postman
+        strawberry
       ];
       programs.obs-studio.enable = true;
+      programs.thunderbird = {
+        enable = true;
+        profiles.default.isDefault = true;
+      };
     })
     {
       home.packages = with pkgs; [
@@ -45,6 +54,13 @@
       programs.fzf.enable = true;
       programs.zathura.enable = true;
 
+      # 剪贴板历史，Mod+Shift+v 打开（Mod+v 是 i3 默认的纵向分割）。源程序关闭后复制的内容和截图仍然可以粘贴。
+      services.copyq.enable = true;
+      xsession.windowManager.i3.config.keybindings = lib.mkOptionDefault {
+        "Mod4+Shift+v" = "exec --no-startup-id ${config.services.copyq.package}/bin/copyq toggle";
+      };
+      xsession.windowManager.i3.config.floating.criteria = [ { class = "copyq"; } ];
+
       # 身份验证弹窗（挂载磁盘、NetworkManager 修改连接等）。
       services.polkit-gnome.enable = true;
       # U 盘插入后自动挂载，并在托盘显示。
@@ -63,7 +79,10 @@
           "text/html" = "google-chrome.desktop";
           "x-scheme-handler/http" = "google-chrome.desktop";
           "x-scheme-handler/https" = "google-chrome.desktop";
-          "application/pdf" = "org.pwmt.zathura.desktop";
+          "application/pdf" = "org.gnome.Evince.desktop";
+          "audio/flac" = "org.strawberrymusicplayer.strawberry.desktop";
+          "audio/mpeg" = "org.strawberrymusicplayer.strawberry.desktop";
+          "audio/ogg" = "org.strawberrymusicplayer.strawberry.desktop";
           "image/png" = "feh.desktop";
           "image/jpeg" = "feh.desktop";
           "video/mp4" = "mpv.desktop";
