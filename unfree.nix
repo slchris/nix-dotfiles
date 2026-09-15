@@ -8,5 +8,4 @@
   "lmstudio"
   "obsidian"
   "postman"
-  "zcode"
 ]
