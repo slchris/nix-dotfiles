@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  opencodePkg,
   pkgs,
   unstablePkgs,
   ...
@@ -167,12 +168,12 @@ in
     # 这些工具几乎每周发版，稳定版 nixpkgs 落后太多，从 unstable 取。
     (lib.mkIf cfg.ai.enable {
       home.packages = keep (
-        with unstablePkgs;
-        [
+        (with unstablePkgs; [
           claude-code
           codex
-          opencode
-        ]
+        ])
+        # opencode 从固定的提交取，见 flake.nix 里 nixpkgs-opencode 的说明。
+        ++ [ opencodePkg ]
       );
     })
   ];

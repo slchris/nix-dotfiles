@@ -58,6 +58,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-opencode": {
+      "locked": {
+        "lastModified": 1787330398,
+        "narHash": "sha256-BRxy8lX9wFYBHIUjF6mxHzQ0h7VHUHfcrZsuL7wT0Co=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "c03747f0c729d362b050bb3dae36d349e5c68184",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "c03747f0c729d362b050bb3dae36d349e5c68184",
+        "type": "github"
+      }
+    },
     "nixpkgs-unstable": {
       "locked": {
         "lastModified": 1789286504,
@@ -115,6 +131,7 @@
         "catppuccin": "catppuccin",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-opencode": "nixpkgs-opencode",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nur-slchris": "nur-slchris",
         "sops-nix": "sops-nix"

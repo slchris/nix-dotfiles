@@ -4,6 +4,10 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     # 更新很快的 AI 编程工具从 unstable 取。
+    # opencode 1.18.30 每次发消息都崩在 SystemPrompt.environment（undefined is not an object
+    # evaluating 'a.name'），上游多人报告、尚未修复，1.18.31 的更新说明里也没有这条。
+    # 先钉在打 1.18.21 的这个 nixpkgs 提交，实测正常。上游修好后删掉这个输入。
+    nixpkgs-opencode.url = "github:NixOS/nixpkgs/c03747f0c729d362b050bb3dae36d349e5c68184";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
@@ -28,6 +32,7 @@
       self,
       nixpkgs,
       nixpkgs-unstable,
+      nixpkgs-opencode,
       home-manager,
       catppuccin,
       sops-nix,
@@ -66,6 +71,8 @@
             {
               sops.package = sops-nix.packages.${hosts.${name}}.sops-install-secrets;
               _module.args.nurPkgs = nur-slchris.legacyPackages.${hosts.${name}};
+              # 见上面 nixpkgs-opencode 输入的说明：1.18.30 有回归，先钉住能用的版本。
+              _module.args.opencodePkg = (import nixpkgs-opencode { system = hosts.${name}; }).opencode;
               _module.args.unstablePkgs = import nixpkgs-unstable {
                 system = hosts.${name};
                 config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) unfreePackages;
