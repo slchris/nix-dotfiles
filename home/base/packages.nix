@@ -89,8 +89,8 @@ in
           nasm
           ninja
           osv-scanner
+          # 只装 pkg-config：它和 pkgconf 都提供 share/aclocal/pkg.m4，一起装会在 profile 里冲突。
           pkg-config
-          pkgconf
           pre-commit
           # promtool 在 prometheus 的 cli 输出里，主包只有服务端。
           prometheus.cli
