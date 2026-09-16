@@ -19,5 +19,12 @@
     cloud.enable = true;
     kubernetes.enable = true;
     ai.enable = true;
+    # Mac 上这三个由 Homebrew 的 cask 提供，不再从 Nix 装一份。
+    # codeql 与 consul 都不在二进制缓存里：codeql 要从 GitHub 下约 1GB（实测卡住），consul 要本机编译。
+    exclude = [
+      "codeql"
+      "consul"
+      "google-cloud-sdk"
+    ];
   };
 }
