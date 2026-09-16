@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.dotfiles.desktop;
-  c = import ./palette.nix;
+  c = import ../../palette.nix;
   mod = "Mod4";
 
   # 窗口配色取自 Catppuccin 官方的 i3 配色方案。

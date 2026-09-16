@@ -41,7 +41,7 @@ in
   services.polybar.settings."module/power" = {
     type = "custom/text";
     format = "󰐥";
-    format-foreground = (import ./palette.nix).red;
+    format-foreground = (import ../../palette.nix).red;
     format-padding = 1;
     click-left = "${powermenu}/bin/powermenu";
   };

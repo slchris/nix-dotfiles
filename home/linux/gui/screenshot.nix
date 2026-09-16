@@ -1,6 +1,6 @@
 { config, lib, ... }:
 let
-  c = import ./palette.nix;
+  c = import ../../palette.nix;
   flameshot = "${config.services.flameshot.package}/bin/flameshot";
   dir = "${config.home.homeDirectory}/Pictures/Screenshots";
 in

@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 let
   inherit (config.dotfiles.desktop) scale;
-  c = import ./palette.nix;
+  c = import ../../palette.nix;
   hex = color: builtins.substring 1 6 color;
   dunstctl = "${config.services.dunst.package}/bin/dunstctl";
 

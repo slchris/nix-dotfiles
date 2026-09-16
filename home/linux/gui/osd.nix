@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.dotfiles.desktop;
-  c = import ./palette.nix;
+  c = import ../../palette.nix;
   rofi = "${config.programs.rofi.finalPackage}/bin/rofi";
 
   # 调节音量、麦克风、亮度、性能模式等之后弹出的提示（OSD）。每类提示带自己的 stack tag，

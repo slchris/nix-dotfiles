@@ -1,10 +1,11 @@
-# 通用层：所有机器都需要的配置，不依赖图形界面，以后 macOS 也可以复用。
+# 通用层：所有机器都需要的配置，不依赖图形界面，Linux 桌面与 macOS 共用。
 {
   imports = [
     ../options.nix
     ./git.nix
     ./packages.nix
     ./pass.nix
+    ./prompt.nix
     ./secrets.nix
     ./shell.nix
     ./theme.nix

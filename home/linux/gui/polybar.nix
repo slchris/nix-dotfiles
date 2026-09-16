@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.dotfiles.desktop;
-  c = import ./palette.nix;
+  c = import ../../palette.nix;
   size = toString cfg.fontSize;
   px = n: n * cfg.scale;
 in

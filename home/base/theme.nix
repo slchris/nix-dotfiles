@@ -6,7 +6,7 @@
     accent = "lavender";
 
     # 以下模块在求值时读取主题源文件（import from derivation）。在 Mac 上求值时，这些读取会被派给
-    # Linux 构建机，所以关闭，改为按 home/linux/gui/palette.nix 的色板手写配色。
+    # Linux 构建机，所以关闭，改为按 home/palette.nix 的色板手写配色。
     polybar.enable = false; # home/linux/gui/polybar.nix
     starship.enable = false; # home/linux/gui/terminal.nix
     fzf.enable = false; # home/linux/gui/terminal.nix

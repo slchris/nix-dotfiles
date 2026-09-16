@@ -1,7 +1,7 @@
 { config, ... }:
 let
   cfg = config.dotfiles.desktop;
-  c = import ./palette.nix;
+  c = import ../../palette.nix;
 in
 {
   services.dunst = {
