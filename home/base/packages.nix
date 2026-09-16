@@ -106,8 +106,12 @@ in
       );
       programs.gh = {
         enable = true;
-        # 与 Mac 一致走 HTTPS，由 gh 的 token 认证，不依赖插卡。
-        settings.git_protocol = "https";
+        settings = {
+          # 与 Mac 一致走 HTTPS，由 gh 的 token 认证，不依赖插卡。
+          git_protocol = "https";
+          # Mac 上原来手写的别名，接管配置文件时补回来。
+          aliases.co = "pr checkout";
+        };
       };
     })
 
