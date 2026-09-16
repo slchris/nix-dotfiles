@@ -40,6 +40,7 @@
       hosts = {
         taiki = "x86_64-linux";
         hanrin = "x86_64-linux";
+        keiki = "aarch64-darwin";
       };
       # 个人身份（git、签名密钥、私密配置），与主机配置分开，同一台机器的多个用户各引用自己的一份。
       users = [ "chris" ];
@@ -90,7 +91,7 @@
               {
                 home = {
                   username = "chris";
-                  homeDirectory = "/home/chris";
+                  homeDirectory = if lib.hasSuffix "darwin" system then "/Users/chris" else "/home/chris";
                   stateVersion = "26.05";
                 };
               }
