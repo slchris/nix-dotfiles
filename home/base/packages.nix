@@ -89,10 +89,11 @@ in
           nasm
           ninja
           osv-scanner
+          pkg-config
           pkgconf
-          postgresql_14
           pre-commit
-          prometheus # promtool
+          # promtool 在 prometheus 的 cli 输出里，主包只有服务端。
+          prometheus.cli
           protobuf
           qemu
           semgrep
@@ -146,7 +147,9 @@ in
           kompose
           kubecm
           kubectl
+          # kubelogin 是 Azure 的，kubelogin-oidc 提供 kubectl-oidc_login，两个都装。
           kubelogin
+          kubelogin-oidc
           kubernetes-helm
           kubeseal
           kustomize
