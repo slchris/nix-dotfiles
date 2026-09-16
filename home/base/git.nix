@@ -54,7 +54,17 @@ in
   config = {
     programs.git = {
       enable = true;
-      settings.user = { inherit (cfg) name email; };
+      lfs.enable = true;
+      settings = {
+        user = { inherit (cfg) name email; };
+        # 拉取时变基而不是生成合并提交。
+        pull.rebase = true;
+        push.default = "simple";
+        # 提交带 Signed-off-by。
+        format.signoff = true;
+        # 切分支、拉取时自动同步子模块。
+        submodule.recurse = true;
+      };
       signing = lib.mkIf (cfg.signingKey != null) {
         key = cfg.signingKey;
         signByDefault = true;

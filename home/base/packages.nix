@@ -75,6 +75,7 @@ in
         with pkgs;
         [
           act
+          bun
           cmake
           codeql
           dnsperf
@@ -126,8 +127,11 @@ in
           awscli2
           cloudflared
           consul
+          minio-client
+          pulumi-bin
           google-cloud-sdk
           s3cmd
+          supabase-cli
           terragrunt
           tfsec
         ]
@@ -143,6 +147,7 @@ in
           cosign
           dive
           egctl
+          fluxcd
           helmfile
           istioctl
           kompose
@@ -157,6 +162,7 @@ in
           skaffold
           skopeo
           stern
+          talosctl
           tektoncd-cli
           trivy
           velero
