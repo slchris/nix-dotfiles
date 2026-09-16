@@ -29,6 +29,13 @@
     gnupg
     pinentry_mac
 
+    # HashiCorp 的工具。BUSL 许可，缓存里没有，第一次装要在本机编译几分钟。
+    # 只装在 Mac 上：taiki 与 hanrin 用不到，不必陪着编译。
+    nomad
+    packer
+    terraform
+    vault
+
     # 其他
     freerdp
     mpv

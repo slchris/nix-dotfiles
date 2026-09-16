@@ -6,8 +6,12 @@
   "consul"
   "google-chrome"
   "lmstudio"
+  "nomad"
   "notion-app"
   "obsidian"
+  "packer"
   "postman"
+  "terraform"
+  "vault"
   "zoom"
 ]
