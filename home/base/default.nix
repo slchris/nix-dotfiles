@@ -3,6 +3,7 @@
   imports = [
     ../options.nix
     ./git.nix
+    ./opencode.nix
     ./packages.nix
     ./pass.nix
     ./prompt.nix
