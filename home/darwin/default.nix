@@ -2,6 +2,7 @@
 {
   imports = [
     ../base
+    ./apps.nix
     ./packages.nix
     ./shell.nix
   ];

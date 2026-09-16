@@ -6,6 +6,8 @@
   "consul"
   "google-chrome"
   "lmstudio"
+  "notion-app"
   "obsidian"
   "postman"
+  "zoom"
 ]
