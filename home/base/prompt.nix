@@ -11,6 +11,9 @@ in
       directory.style = "bold lavender";
       git_branch.style = "bold mauve";
 
+      # node 的图标换成 Haskell 那个 λ。
+      nodejs.symbol = "λ ";
+
       # 云平台的模块默认显示当前账号与区域：gcloud 会把登录用的 Google 邮箱直接印在提示符上，
       # aws 只要设了 AWS_DEFAULT_REGION 就一直显示。都是噪音，截图时还会暴露账号，关掉。
       # 需要时用 gcloud config list 与 aws configure list 查看。
