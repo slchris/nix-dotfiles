@@ -39,8 +39,14 @@
           *":/opt/homebrew/opt/coreutils/libexec/gnubin:"*) ;;
           *) PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/bin:$PATH" ;;
         esac
-        export PATH
+      else
+        # formula 卸完后 Homebrew 只剩 cask 与 brew 本身，放在 PATH 末尾即可。
+        case ":$PATH:" in
+          *":/opt/homebrew/bin:"*) ;;
+          *) PATH="$PATH:/opt/homebrew/bin:/opt/homebrew/sbin" ;;
+        esac
       fi
+      export PATH
 
       # gpg-agent 兼作 SSH agent，插着 YubiKey 就能 SSH 登录。gnupg 仍是 Homebrew 那份。
       if command -v gpgconf >/dev/null; then
