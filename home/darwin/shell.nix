@@ -23,23 +23,24 @@
   programs.bash = {
     # 只有登录 shell 读 ~/.bash_profile。
     profileExtra = ''
-      # 补全统一用 home-manager 装的 bash-completion 2.x，不要再加载 Homebrew 的 1.3：
-      # v1 会把补全目录指到 /opt/homebrew/etc/bash_completion.d，随后 v2 再读一遍那批 v1 写法的脚本，
-      # 因为 v2 没有 have 这个函数，每个脚本都会报 "have: command not found"。
-      # brew 自己的补全兼容 v2，单独加载。
-      [[ -r /opt/homebrew/etc/bash_completion.d/brew ]] && . /opt/homebrew/etc/bash_completion.d/brew
+      # 补全全部由 home-manager 的 bash-completion 2.x 提供，不加载 Homebrew 的任何补全。
+      # Homebrew 装的是 1.3，它会把补全目录指到自己那 246 个 v1 写法的脚本，v2 再读一遍就会
+      # 因为没有 have 这个函数而逐个报错。Nix 装的包自带 v2 补全，由 XDG_DATA_DIRS 自动发现。
       # OrbStack 的命令行工具与 docker 集成。
       [[ -r "$HOME/.orbstack/shell/init.bash" ]] && . "$HOME/.orbstack/shell/init.bash" 2>/dev/null
     '';
 
     initExtra = ''
-      # PATH 要排在最前面：下面几行用到的 gpgconf、mise 都在 Homebrew 里。
-      # GNU 工具排在 BSD 之前：macOS 自带的 bash 3.2 没有 mapfile，BSD grep 没有 -P，BSD realpath 没有 -m。
-      case ":$PATH:" in
-        *":/opt/homebrew/opt/coreutils/libexec/gnubin:"*) ;;
-        *) PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/bin:$PATH" ;;
-      esac
-      export PATH
+      # PATH 要排在最前面：下面几行用到的 gpgconf、mise 现在还来自 Homebrew。
+      # 迁移期间 Homebrew 仍排在前面，且 GNU 工具要排在 BSD 之前。Nix 的 coreutils 与 gnugrep
+      # 已经装在用户这一层，等 Homebrew 的 formula 卸干净、下面这段不再命中，GNU 工具就由 Nix 提供。
+      if [[ -d /opt/homebrew/opt/coreutils/libexec/gnubin ]]; then
+        case ":$PATH:" in
+          *":/opt/homebrew/opt/coreutils/libexec/gnubin:"*) ;;
+          *) PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/bin:$PATH" ;;
+        esac
+        export PATH
+      fi
 
       # gpg-agent 兼作 SSH agent，插着 YubiKey 就能 SSH 登录。gnupg 仍是 Homebrew 那份。
       if command -v gpgconf >/dev/null; then
