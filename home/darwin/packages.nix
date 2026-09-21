@@ -14,12 +14,14 @@
     bat
     btop
     fastfetch
+    fd
     fzf
     htop
     jq
     mtr
     ncdu
     p7zip
+    ripgrep
     rsync
     tmux
     tree
