@@ -20,6 +20,13 @@
 
   home.sessionVariables.AWS_DEFAULT_REGION = "us-east-1";
 
+  # 进入项目目录时自动加载 flake 的 devShell（.envrc 里写 use flake）。
+  # Linux 上 direnv 由系统层（homelab 的 NixOS 配置）提供，这里只管 Mac。
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+
   programs.bash = {
     # 只有登录 shell 读 ~/.bash_profile。
     profileExtra = ''
