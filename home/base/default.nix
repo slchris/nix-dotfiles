@@ -2,6 +2,7 @@
 {
   imports = [
     ../options.nix
+    ./dsh.nix
     ./git.nix
     ./opencode.nix
     ./packages.nix
