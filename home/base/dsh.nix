@@ -42,6 +42,19 @@ in
   config = lib.mkIf (cfg.ai.enable && pkgs.stdenv.hostPlatform.isDarwin) {
     home.packages = [ dshCli ];
 
+    # 让 kixparadigm 成为默认 agent preset（web 与 acp profile 都吃这一层）：
+    # 上游 web profile 自带 agent-presets（默认 standard），acp profile 干脆没挂；
+    # 这个 home 层 patch 对所有 profile 生效，insert 同名 id 会覆盖前者、补齐后者。
+    # 文件由 home-manager 管理，勿手改。
+    home.file.".dsh/cordis.patch.yml".text = ''
+      # dsh home 层 patch，见 nix-dotfiles home/base/dsh.nix。
+      - insert:
+          - id: agent-presets
+            name: '@deepseek-ai/dsh-agent-presets'
+            config:
+              default: kixparadigm
+    '';
+
     # 只接管这两个 id，~/.dsh/.agent-presets 下别的东西不动。
     home.activation.kixparadigmPresets = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       presets="$HOME/.dsh/.agent-presets"
