@@ -11,13 +11,17 @@ let
   px = n: n * cfg.scale;
 in
 {
+  # 不让 systemd 在会话启动时自启 polybar（tray.target 会早于 i3）：它的 i3/xwindow
+  # 模块只在启动时探测一次，早于 i3 会失败并被永久禁用。改由 i3 启动/重载时拉起，
+  # 见 i3.nix 的 startup 命令。
+  systemd.user.services.polybar.Install.WantedBy = lib.mkForce [ ];
+
   services.polybar = {
     enable = true;
     package = pkgs.polybar.override {
       i3Support = true;
       pulseSupport = true;
     };
-    # 实际由 i3 在启动时执行 systemctl --user restart polybar，见 i3.nix。
     script = "polybar main &";
     settings = {
       "bar/main" = {

@@ -76,7 +76,9 @@ in
       bars = [ ];
 
       startup = [
-        # tray.target 在 i3 启动前就拉起 polybar，此时它的 i3 模块连不上 i3，所以由 i3 在启动和重载时重启 polybar。
+        # polybar 不由 tray.target 自启（见 polybar.nix）：那样它会在 i3 之前启动，
+        # i3/xwindow 模块初始化失败后被永久禁用，状态栏缺块且不会自愈。这里由 i3
+        # 在启动和重载时负责拉起/重启，此时 i3 的 IPC 一定可用。
         {
           command = "systemctl --user restart polybar";
           always = true;
