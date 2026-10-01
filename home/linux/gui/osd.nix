@@ -93,6 +93,16 @@ let
         notify keyboard "󰌌  Keyboard backlight" "$level / $max" "$((level * 100 / max))" "${c.yellow}"
       }
 
+      keyboard-adjust() {
+        # 软件调节键盘背光（MacBook 的 SPI 键盘：F5/F6 只上报事件，不会自己改 LED）。
+        if [[ $1 == up ]]; then
+          brightnessctl --quiet --device="$2" set 6%+
+        else
+          brightnessctl --quiet --device="$2" --min-value=0 set 6%-
+        fi
+        keyboard "$2"
+      }
+
       airplane() {
         # 内核的 rfkill-input 已经切换了无线开关，这里只读取切换后的状态。
         sleep 0.3
@@ -157,11 +167,12 @@ let
         mic) mic ;;
         brightness) brightness "$2" "$3" ;;
         keyboard) keyboard "$2" ;;
+        keyboard-adjust) keyboard-adjust "$2" "$3" ;;
         airplane) airplane ;;
         profile) profile "$2" "''${3:-}" ;;
         display) display "$2" ;;
         *)
-          echo "usage: osd volume|mic|brightness|keyboard|airplane|profile|display ..." >&2
+          echo "usage: osd volume|mic|brightness|keyboard|keyboard-adjust|airplane|profile|display ..." >&2
           exit 2
           ;;
       esac
@@ -209,6 +220,10 @@ in
     }
     // lib.optionalAttrs (cfg.keyboardBacklight != null) {
       "XF86KbdLightOnOff" = run "keyboard ${cfg.keyboardBacklight}";
+    }
+    // lib.optionalAttrs (cfg.keyboardBacklight != null && cfg.keyboardBacklightAdjust) {
+      "XF86KbdBrightnessUp" = run "keyboard-adjust ${cfg.keyboardBacklight} up";
+      "XF86KbdBrightnessDown" = run "keyboard-adjust ${cfg.keyboardBacklight} down";
     }
     # 显示切换菜单里有“只用笔记本屏幕”，只给有内置屏的笔记本（设置了 backlight）绑定。
     // lib.optionalAttrs (cfg.backlight != null && cfg.monitor != null) {

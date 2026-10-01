@@ -17,9 +17,12 @@
     monitor = "eDP-1";
     networkInterface = "wlp1s0";
     battery = "BAT0";
-    backlight = "intel_backlight";
-    # Apple SMC 的键盘背光；如果 polybar 不显示，用 /sys/class/leds 下的实际名字核实。
-    keyboardBacklight = "smc::kbd_backlight";
+    # 这台机器没有 intel_backlight（背光由 ACPI video 接管），acpi_video0 可用；
+    # 想换更细的 intel_backlight 可以加内核参数 acpi_backlight=native。
+    backlight = "acpi_video0";
+    # applespi 的键盘背光 LED；F5/F6 只上报事件，需要下面 software 调节。
+    keyboardBacklight = "spi::kbd_backlight";
+    keyboardBacklightAdjust = true;
     # 系统层（homelab 的 nixos/macbook.nix）启用了 power-profiles-daemon。
     powerProfiles = true;
     wallpaper = "${pkgs.nixos-artwork.wallpapers.catppuccin-mocha.gnomeFilePath}";

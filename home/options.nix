@@ -72,6 +72,11 @@
       example = "tpacpi::kbd_backlight";
       description = "/sys/class/leds 下的键盘背光；设置后用 Fn 键调节键盘背光时弹出提示。";
     };
+    keyboardBacklightAdjust = lib.mkEnableOption ''
+      键盘背光由软件调节。MacBook 的 SPI 键盘按 F5/F6 只上报按键事件、不会自己改 LED，
+      打开后 XF86KbdBrightnessUp/Down 会用 brightnessctl 调节并显示 OSD；
+      固件自己调节键盘背光的机器保持关闭
+    '';
     powerProfiles = lib.mkEnableOption "性能模式的快捷键与切换提示，系统层要启用 power-profiles-daemon";
   };
 }
