@@ -95,12 +95,14 @@ let
 
       keyboard-adjust() {
         # 软件调节键盘背光（MacBook 的 SPI 键盘：F5/F6 只上报事件，不会自己改 LED）。
-        if [[ $1 == up ]]; then
-          brightnessctl --quiet --device="$2" set 6%+
+        # $1 是 LED 名，$2 是 up/down。
+        local device=$1 direction=$2
+        if [[ $direction == up ]]; then
+          brightnessctl --quiet --device="$device" set 6%+
         else
-          brightnessctl --quiet --device="$2" --min-value=0 set 6%-
+          brightnessctl --quiet --device="$device" --min-value=0 set 6%-
         fi
-        keyboard "$2"
+        keyboard "$device"
       }
 
       airplane() {
