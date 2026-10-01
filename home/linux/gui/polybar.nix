@@ -188,7 +188,9 @@ in
       "module/tray" = {
         type = "internal/tray";
         tray-spacing = 8;
-        tray-size = "70%";
+        # 百分比 tray-size 在 DPI 缩放下有上游布局问题（polybar#3044，tray 图标变化后
+        # 可能错位直到 polybar 重启）；用等价的物理像素值（70% × 32pt 高）。
+        tray-size = "${toString (22 * cfg.scale)}px";
       };
     };
   };

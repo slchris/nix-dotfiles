@@ -98,6 +98,8 @@ in
         "${mod}+b" = "exec google-chrome-stable";
         "${mod}+e" = "exec thunar";
         "${mod}+Shift+x" = "exec --no-startup-id loginctl lock-session";
+        # polybar 的 tray 图标增减偶发错位（上游 polybar#3044），一键重启状态栏恢复。
+        "${mod}+Shift+b" = "exec --no-startup-id systemctl --user restart polybar";
         "XF86AudioPlay" = "exec --no-startup-id ${pkgs.playerctl}/bin/playerctl play-pause";
         "XF86AudioNext" = "exec --no-startup-id ${pkgs.playerctl}/bin/playerctl next";
         "XF86AudioPrev" = "exec --no-startup-id ${pkgs.playerctl}/bin/playerctl previous";
