@@ -1,7 +1,11 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   # 采麟（sairin）：12 英寸 MacBook（2015，MacBook8,1），2304x1440 IPS（约 226 PPI）。
   imports = [ ../home/linux/gui ];
+
+  # 这台机器还没有 nix-secrets / GitHub 凭据，pass 库克隆会失败并让 HM 激活超时；
+  # 配好凭据后删掉这一行，并删除 /home/chris/.password-store 让它重新克隆。
+  dotfiles.pass.enable = lib.mkForce false;
 
   dotfiles.desktop = {
     # 2304x1440 按 2 倍缩放，逻辑分辨率 1152x720；偏小的话可以改成 144（1.5 倍，1536x960）。
