@@ -2,6 +2,7 @@
 {
   imports = [
     ../options.nix
+    ./claude-code.nix
     ./dsh.nix
     ./git.nix
     ./opencode.nix
