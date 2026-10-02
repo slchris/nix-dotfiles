@@ -25,6 +25,9 @@
       url = "github:slchris/nur";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # oh-my-pi（omp）：另一个 coding agent，上游自带 home-manager 模块（programs.omp）。
+    # 它锁自己的 nixpkgs（unstable）和各种构建输入，不 follows，免得被 26.05 拖住构建。
+    omp.url = "github:can1357/oh-my-pi";
   };
 
   outputs =
@@ -37,6 +40,7 @@
       catppuccin,
       sops-nix,
       nur-slchris,
+      omp,
       ...
     }:
     let
@@ -70,11 +74,14 @@
           imports = [
             catppuccin.homeModules.catppuccin
             sops-nix.homeManagerModules.sops
+            omp.homeManagerModules.default
             {
               sops.package = sops-nix.packages.${hosts.${name}}.sops-install-secrets;
               _module.args.nurPkgs = nur-slchris.legacyPackages.${hosts.${name}};
               # 见上面 nixpkgs-opencode 输入的说明：1.18.30 有回归，先钉住能用的版本。
               _module.args.opencodePkg = (import nixpkgs-opencode { system = hosts.${name}; }).opencode;
+              # omp 的包由 home/base/omp.nix 包一层 sops key 注入的 wrapper，这里只取上游包。
+              _module.args.ompPkg = omp.packages.${hosts.${name}}.default;
               _module.args.unstablePkgs = import nixpkgs-unstable {
                 system = hosts.${name};
                 config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) unfreePackages;

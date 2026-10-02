@@ -9,6 +9,9 @@
 # key：声明了 sops 的 deepseek-api-key 的主机（keiki）读解出来的文件；NixOS 上如果
 # 走系统层 sops，秘密在 /run/secrets/deepseek-api-key。两者都没有时留
 # ANTHROPIC_AUTH_TOKEN 环境变量兜底，再没有就明确报错。
+#
+# auto 模式的分类器：DeepSeek 网关做不了官方的服务端检查，显式关掉这项协商，
+# 免得每个新会话都弹「会话不合格」的提示。计费行为不变，分类器仍按 token 计。
 {
   config,
   lib,
@@ -46,6 +49,7 @@ let
     export CLAUDE_CODE_SUBAGENT_MODEL="deepseek-flash"
     export CLAUDE_CODE_EFFORT_LEVEL="max"
     export CLAUDE_CODE_AUTO_COMPACT_WINDOW="786432"
+    export CLAUDE_CODE_AUTO_MODE_SERVER="0"
 
     exec ${unstablePkgs.claude-code}/bin/claude "$@"
   '';

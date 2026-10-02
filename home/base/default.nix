@@ -5,6 +5,7 @@
     ./claude-code.nix
     ./dsh.nix
     ./git.nix
+    ./omp.nix
     ./opencode.nix
     ./packages.nix
     ./pass.nix
