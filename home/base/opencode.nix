@@ -96,20 +96,29 @@ let
       ];
     };
 
-    # Codex 桌面版的 computer use 运行时（cua_repl MCP 服务），让 opencode 也能操作桌面应用。
-    # command/args/env 抄自 ~/.codex/plugins/cache/openai-bundled/unified-computer-use/<版本>/.mcp.json；
+    # Codex 桌面版的 computer use（cua_repl MCP 服务），让 opencode 也能操作桌面应用。
+    # command/args/env 来自 ~/.codex/plugins/cache/openai-bundled/unified-computer-use/<版本>/.mcp.json；
     # Codex 升级后版本号会变，BROWSER_USE_CODEX_APP_VERSION 要跟着更新。
-    # 注意：Codex 的授权弹窗（"Allow Computer Use to use ...?"）走 MCP elicitation，
-    # opencode 的 MCP 客户端目前不声明 elicitation 能力（issue #23066），需要授权的调用
-    # （例如 cua.getApp）会直接报错；等 opencode 支持 elicitation 后才能完整使用。
+    # opencode 1.18.21 的 MCP 客户端不支持 elicitation（issue #23066），而 Codex 的授权
+    # 弹窗（"Allow Computer Use to use ...?"）走 elicitation/create，直接注册会被卡死。
+    # 因此先经过同目录的 codex-cu-proxy.py：它代 opencode 声明 elicitation，收到授权请求时
+    # 弹 macOS 对话框（拒绝 / 允许一次 / 始终允许）；"始终允许"按 App 记在
+    # ~/.local/state/codex-cu-proxy/approvals.json，所有决定写入同目录 approvals.log。
+    # 想完全静默放行（不再确认），把 CODEX_CU_PROXY_AUTO_APPROVE 改成 "1"。
+    # 等 opencode v2 支持 elicitation 后可以直接去掉代理，command 换回 node + cua-repl.mjs。
     mcp.codex-cu = {
       type = "local";
       enabled = true;
+      # 授权对话框最长等 300s，把 MCP 调用超时放宽到 10 分钟。
+      timeout = 600000;
       command = [
+        "${pkgs.python3}/bin/python3"
+        "${./codex-cu-proxy.py}"
         "/Applications/Codex.app/Contents/Resources/cua_node/bin/node"
         "/Applications/Codex.app/Contents/Resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
       ];
       environment = {
+        CODEX_CU_PROXY_AUTO_APPROVE = "0";
         NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000";
         NODE_REPL_NODE_MODULE_DIRS = "/Applications/Codex.app/Contents/Resources/cua_node/lib/node_modules";
         NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node";
