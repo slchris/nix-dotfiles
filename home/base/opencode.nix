@@ -95,6 +95,40 @@ let
         "warning"
       ];
     };
+
+    # Codex 桌面版的 computer use 运行时（cua_repl MCP 服务），让 opencode 也能操作桌面应用。
+    # command/args/env 抄自 ~/.codex/plugins/cache/openai-bundled/unified-computer-use/<版本>/.mcp.json；
+    # Codex 升级后版本号会变，BROWSER_USE_CODEX_APP_VERSION 要跟着更新。
+    # 注意：Codex 的授权弹窗（"Allow Computer Use to use ...?"）走 MCP elicitation，
+    # opencode 的 MCP 客户端目前不声明 elicitation 能力（issue #23066），需要授权的调用
+    # （例如 cua.getApp）会直接报错；等 opencode 支持 elicitation 后才能完整使用。
+    mcp.codex-cu = {
+      type = "local";
+      enabled = true;
+      command = [
+        "/Applications/Codex.app/Contents/Resources/cua_node/bin/node"
+        "/Applications/Codex.app/Contents/Resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+      ];
+      environment = {
+        NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000";
+        NODE_REPL_NODE_MODULE_DIRS = "/Applications/Codex.app/Contents/Resources/cua_node/lib/node_modules";
+        NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node";
+        NODE_REPL_TRUSTED_CODE_PATHS = "${config.home.homeDirectory}/.codex:/Applications/Codex.app/Contents/Resources/cua_node/lib/node_modules";
+        CODEX_HOME = "${config.home.homeDirectory}/.codex";
+        BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab,mcpapps";
+        BROWSER_USE_TINYSKY_ENABLED = "1";
+        NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin.";
+        NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative.";
+        NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = "Control desktop apps on macOS through Computer Use.";
+        BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod";
+        BROWSER_USE_CODEX_APP_VERSION = "26.930.31730";
+        NODE_REPL_TRUSTED_SERVICES = "{\"browser\":\"@oai/browser-desktop/service\",\"sky\":\"@oai/sky/service\"}";
+        SKY_CUA_SERVICE_PATH = "${config.home.homeDirectory}/.codex/computer-use/Codex Computer Use.app";
+        CODEX_CLI_PATH = "/Applications/Codex.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex";
+        CUA_REPL_NODE_REPL_PATH = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node_repl";
+        CUA_REPL_ENABLED_SURFACES = "browser,computer";
+      };
+    };
   };
 in
 {
