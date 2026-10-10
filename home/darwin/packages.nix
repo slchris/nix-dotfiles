@@ -2,7 +2,7 @@
 # macOS 没有系统层可依赖，只能装在用户这一层。
 #
 # 目标是把 Homebrew 的 formula 全部换成 Nix，Homebrew 只留 cask。
-{ pkgs, ... }:
+{ pkgs, grokBuildPkg, ... }:
 {
   home.packages = with pkgs; [
     # GNU 工具。macOS 自带的是 BSD 版：bash 3.2 没有 mapfile，BSD grep 没有 -P，BSD realpath 没有 -m。
@@ -43,5 +43,9 @@
     mpv
     syncthing
     terminal-notifier
+
+    # xAI 的终端 coding agent。官方安装脚本会把自更新二进制放进 ~/.grok，交给这个
+    # flake 按版本钉住（见 flake.nix 的 grok-build-nix），上游更新走 nix flake update。
+    grokBuildPkg
   ];
 }

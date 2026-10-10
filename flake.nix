@@ -28,6 +28,13 @@
     # oh-my-pi（omp）：另一个 coding agent，上游自带 home-manager 模块（programs.omp）。
     # 它锁自己的 nixpkgs（unstable）和各种构建输入，不 follows，免得被 26.05 拖住构建。
     omp.url = "github:can1357/oh-my-pi";
+    # Grok Build：xAI 的终端 coding agent。官方只发 curl | bash 的自更新二进制，
+    # 这个 flake 把官方二进制按版本与哈希钉住，并关掉自更新（Nix store 只读，
+    # 自更新本来也无处可写）。跟着 nixpkgs，更新上游版本走 nix flake update 这个输入。
+    grok-build-nix = {
+      url = "github:gesop0n/grok-build-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -41,6 +48,7 @@
       sops-nix,
       nur-slchris,
       omp,
+      grok-build-nix,
       ...
     }:
     let
@@ -82,6 +90,8 @@
               _module.args.opencodePkg = (import nixpkgs-opencode { system = hosts.${name}; }).opencode;
               # omp 的包由 home/base/omp.nix 包一层 sops key 注入的 wrapper，这里只取上游包。
               _module.args.ompPkg = omp.packages.${hosts.${name}}.default;
+              # Grok Build，只有 Mac 的 home/darwin/packages.nix 会引用。
+              _module.args.grokBuildPkg = grok-build-nix.packages.${hosts.${name}}.default;
               _module.args.unstablePkgs = import nixpkgs-unstable {
                 system = hosts.${name};
                 config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) unfreePackages;
