@@ -60,9 +60,9 @@ in
       # 同步到 homelab 的 atuin 服务端，与 Mac 上的设置一致。新机器要登录一次，见 README。
       programs.atuin = {
         enable = true;
-        # 从 unstable 取：稳定版是 18.15.2，而本机数据库已被更新的版本迁移过，
-        # 旧客户端启动就报 "migration … was previously applied but is missing"。
-        package = unstablePkgs.atuin;
+        # 官方预编译二进制（./atuin-bin.nix）：稳定版太旧会撞数据库迁移，而 unstable 的
+        # atuin 在 darwin 上没有缓存、每次都要本地编 Rust。二进制两全，不编译。
+        package = pkgs.callPackage ./atuin-bin.nix { };
         settings = {
           sync_address = "https://atuin.infra.plz.ac";
           auto_sync = true;
