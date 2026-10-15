@@ -12,11 +12,10 @@
     "$HOME/.bun/bin"
     "$HOME/.lmstudio/bin"
     "$HOME/.antigravity/antigravity/bin"
-    # 应用自带的命令行工具：latex、tshark、mpv、imgcat。
-    # Wireshark 与 mpv 由 Homebrew cask 提供，命令行工具在 app bundle 里，不在 PATH。
+    # 应用自带的命令行工具：latex、tshark、imgcat。
+    # Wireshark 由 Homebrew cask 提供，tshark 在 app bundle 里，不在 PATH。
     "/Library/TeX/texbin"
     "/Applications/Wireshark.app/Contents/MacOS"
-    "/Applications/mpv.app/Contents/MacOS"
     "/Applications/iTerm.app/Contents/Resources/utilities"
   ];
 
