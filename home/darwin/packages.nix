@@ -27,9 +27,9 @@
     tree
     wget
 
-    # OpenPGP 卡。gpg-agent 兼作 SSH agent，pinentry-mac 弹图形界面输入 PIN。
+    # OpenPGP 卡。gpg-agent 兼作 SSH agent。pinentry-mac 带 .app，改由 Homebrew 的
+    # formula 提供（见 hosts 的 workstation.homebrew.brews），gpg 从 PATH 找得到。
     gnupg
-    pinentry_mac
 
     # HashiCorp 的工具。BUSL 许可，缓存里没有，第一次装要在本机编译几分钟。
     # 只装在 Mac 上：taiki 与 hanrin 用不到，不必陪着编译。
@@ -40,9 +40,7 @@
 
     # 其他
     freerdp
-    mpv
     syncthing
-    terminal-notifier
 
     # xAI 的终端 coding agent。官方安装脚本会把自更新二进制放进 ~/.grok，交给这个
     # flake 按版本钉住（见 flake.nix 的 grok-build-nix），上游更新走 nix flake update。
