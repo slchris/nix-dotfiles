@@ -143,6 +143,28 @@ in
 {
   config = lib.mkIf cfg.ai.enable {
     # opencode 认 opencode.json 与 opencode.jsonc，两个都在会有歧义，只留一个。
-    home.file.".config/opencode/opencode.jsonc".text = builtins.toJSON settings;
+    #
+    # 不能直接用 home.file 软链到 /nix/store：magpie 要改写这个文件来切模型
+    # （`magpie opencode myclaw/claude-opus-5.5`），软链是只读的，会报
+    # "permission denied"。所以改成激活时合并：声明式设置（权限、MCP）以这里为准，
+    # magpie 写入的 model/provider 原样保留。
+    home.activation.opencodeConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      cfg="$HOME/.config/opencode/opencode.jsonc"
+      base=${pkgs.writeText "opencode-base.jsonc" (builtins.toJSON settings)}
+
+      run mkdir -p "$HOME/.config/opencode"
+      if [ -L "$cfg" ] || [ ! -e "$cfg" ]; then
+        run rm -f "$cfg"
+        run install -m644 "$base" "$cfg"
+      else
+        tmp="$cfg.tmp.$$"
+        if ${pkgs.jq}/bin/jq -s '.[0] * .[1]' "$base" "$cfg" > "$tmp"; then
+          run mv "$tmp" "$cfg"
+        else
+          run rm -f "$tmp"
+          echo "opencode.jsonc: merge failed, left unchanged" >&2
+        fi
+      fi
+    '';
   };
 }
