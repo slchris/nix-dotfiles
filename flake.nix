@@ -35,6 +35,21 @@
       url = "github:gesop0n/grok-build-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # 各家 coding agent 共用的 skill 仓库。三个都没有 flake.nix，当源码树取来即可。
+    # 它们只提供 SKILL.md 目录，由 home/base/agent-skills.nix 软链进 agent 的 skill 路径，
+    # 升级走 nix flake update agents-skills-<名字>。
+    agents-skills-cloudflare = {
+      url = "github:cloudflare/security-audit-skill";
+      flake = false;
+    };
+    agents-skills-ponytail = {
+      url = "github:DietrichGebert/ponytail";
+      flake = false;
+    };
+    agents-skills-mattpocock = {
+      url = "github:mattpocock/skills";
+      flake = false;
+    };
   };
 
   outputs =
@@ -49,6 +64,9 @@
       nur-slchris,
       omp,
       grok-build-nix,
+      agents-skills-cloudflare,
+      agents-skills-ponytail,
+      agents-skills-mattpocock,
       ...
     }:
     let
@@ -92,6 +110,12 @@
               _module.args.ompPkg = omp.packages.${hosts.${name}}.default;
               # Grok Build，只有 Mac 的 home/darwin/packages.nix 会引用。
               _module.args.grokBuildPkg = grok-build-nix.packages.${hosts.${name}}.default;
+              # agent skill 的源码树，由 home/base/agent-skills.nix 使用。与平台无关，各主机同一份。
+              _module.args.agentSkillSources = {
+                cloudflare = agents-skills-cloudflare;
+                ponytail = agents-skills-ponytail;
+                mattpocock = agents-skills-mattpocock;
+              };
               _module.args.unstablePkgs = import nixpkgs-unstable {
                 system = hosts.${name};
                 config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) unfreePackages;

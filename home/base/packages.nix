@@ -166,7 +166,8 @@ in
           skopeo
           stern
           talosctl
-          tektoncd-cli
+          # 官方预编译二进制（./tkn-bin.nix）：稳定版 0.45.0 缺安全修复，顺带提供 kubectl-tkn 插件。
+          (callPackage ./tkn-bin.nix { })
           trivy
           velero
         ]

@@ -2,6 +2,7 @@
 {
   imports = [
     ../options.nix
+    ./agent-skills.nix
     ./claude-code.nix
     ./dsh.nix
     ./git.nix
