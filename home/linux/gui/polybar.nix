@@ -150,29 +150,47 @@ in
         label = "%percentage%%";
       };
 
+      # internal/battery 只用 charge_now/charge_full 自己算百分比，完全不读内核的
+      # capacity。这台 MacBook 的 bq20z451 电量计的 charge_full（1836mAh）与
+      # 电量计自己报的 state-of-charge 对不上，于是 bar 显示 53%、系统其它地方
+      # （upower、/sys/.../capacity）显示 18%。改成直接读 capacity，和系统一致。
       "module/battery" = lib.mkIf (cfg.battery != null) {
-        type = "internal/battery";
-        battery = cfg.battery;
-        adapter = "AC";
-        full-at = 99;
-        low-at = 15;
-        poll-interval = 5;
-        format-charging = "<label-charging>";
-        label-charging = "󰂄 %percentage%%";
-        label-charging-foreground = c.green;
-        format-discharging = "<ramp-capacity> <label-discharging>";
-        label-discharging = "%percentage%%";
-        ramp-capacity-0 = "󰁺";
-        ramp-capacity-0-foreground = c.red;
-        ramp-capacity-1 = "󰁼";
-        ramp-capacity-1-foreground = c.peach;
-        ramp-capacity-2 = "󰁾";
-        ramp-capacity-3 = "󰂀";
-        ramp-capacity-4 = "󰁹";
-        ramp-capacity-foreground = c.green;
-        format-full = "<label-full>";
-        label-full = "󰁹 %percentage%%";
-        label-full-foreground = c.green;
+        type = "custom/script";
+        interval = 5;
+        format = "<label>";
+        label = "%output%";
+        exec = toString (
+          pkgs.writeShellScript "polybar-battery" ''
+            bat=/sys/class/power_supply/${cfg.battery}
+            [ -r "$bat/capacity" ] || exit 0
+            cap=$(cat "$bat/capacity") || exit 0
+            status=$(cat "$bat/status" 2>/dev/null)
+
+            case "$status" in
+              Charging|Full)
+                if [ "$cap" -ge 99 ]; then
+                  printf '%%{F${c.green}}󰁹 %s%%%%{F-}' "$cap"
+                else
+                  printf '%%{F${c.green}}󰂄 %s%%%%{F-}' "$cap"
+                fi
+                ;;
+              *)
+                if [ "$cap" -le 20 ]; then
+                  icon=󰁺; color=${c.red}
+                elif [ "$cap" -le 40 ]; then
+                  icon=󰁼; color=${c.peach}
+                elif [ "$cap" -le 60 ]; then
+                  icon=󰁾; color=${c.green}
+                elif [ "$cap" -le 80 ]; then
+                  icon=󰂀; color=${c.green}
+                else
+                  icon=󰁹; color=${c.green}
+                fi
+                printf '%%{F%s}%s %s%%%%{F-}' "$color" "$icon" "$cap"
+                ;;
+            esac
+          ''
+        );
       };
 
       "module/date" = {
