@@ -123,21 +123,21 @@ in
 
     (lib.mkIf cfg.cloud.enable {
       home.packages = keep (
-        with pkgs;
-        [
+        (with pkgs; [
           aliyun-cli
           ansible
           awscli2
           cloudflared
           consul
           minio-client
-          pulumi-bin
           google-cloud-sdk
           s3cmd
           supabase-cli
           terragrunt
           tfsec
-        ]
+        ])
+        # pulumi 发版比稳定版 nixpkgs 快得多（26.05 还停在 3.237.0），改从 unstable 取。
+        ++ (with unstablePkgs; [ pulumi-bin ])
       );
     })
 
